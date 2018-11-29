@@ -15,6 +15,11 @@ export default class Main extends Component {
     try {
       const response = await api.get(`/repos/${this.state.repositoryInput}`);
 
+      // const { repositoryInput } = await api.get(`/repos/${this.state}`);
+
+      // const { repositoryInput } = this.state;
+      // const { ...data } = await api.get(`/repos/${repositoryInput}`);
+
       this.setState({
         repositories: [...this.state.repositories, response.data],
         repositoryInput: '',
