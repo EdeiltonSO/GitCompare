@@ -13,15 +13,22 @@ export default class Main extends Component {
   handleAddRepository = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.get(`/repos/${this.state.repositoryInput}`);
+      // Sem desestruturação, conforme aula:
+      // const response = await api.get(`/repos/${this.state.repositoryInput}`);
 
+      // Tentativa 1:
       // const { repositoryInput } = await api.get(`/repos/${this.state}`);
 
+      // Tentativa 2:
       // const { repositoryInput } = this.state;
-      // const { ...data } = await api.get(`/repos/${repositoryInput}`);
+      // const { data } = await api.get(`/repos/${repositoryInput}`);
+
+      const { repositoryInput, repositories } = this.state;
+      const response = await api.get(`/repos/${repositoryInput}`);
 
       this.setState({
-        repositories: [...this.state.repositories, response.data],
+        repositories: [...repositories, response.data],
+        // repositories: [...this.state.repositories, response.data],
         repositoryInput: '',
       });
     } catch (error) {
@@ -30,6 +37,8 @@ export default class Main extends Component {
   };
 
   render() {
+    const { repositoryInput, repositories: repoList } = this.state;
+
     return (
       <Container>
         <img src={logo} alt="Github Compare" />
@@ -37,13 +46,13 @@ export default class Main extends Component {
           <input
             type="text"
             placeholder="usuário/repositório"
-            value={this.state.repositoryInput}
+            value={repositoryInput}
             onChange={e => this.setState({ repositoryInput: e.target.value })}
           />
           <button type="submit">OK</button>
         </Form>
 
-        <CompareList repositories={this.state.repositories} />
+        <CompareList repositories={repoList} />
       </Container>
     );
   }
